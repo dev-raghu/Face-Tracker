@@ -3,14 +3,14 @@ import cv2 as opencv;
 
 class TrackFace:
     """Utility class to implement face tracking function"""
-    def __init__(self, face_cascade, frame):
+    def __init__(self, face_cascade):
         self.face_cascade = face_cascade
-        self.frame = frame
 
-    def track_face(self):
+
+    def track_face(self, path_to_image):
         """Tracks face with a white rectangle, feel free to play around with the numbers"""
         while 1:
-            _, image = self.frame.read()
+            image = opencv.imread(path_to_image)
             gray = opencv.cvtColor(image, opencv.COLOR_BGR2GRAY);
             faces = self.face_cascade.detectMultiScale(gray, 1.2, 5)
 
@@ -33,7 +33,6 @@ class TrackFace:
                 # break once the user presses ESC
                 break
 
-        self.frame.release()
         opencv.destroyAllWindows()
 
 
@@ -43,9 +42,7 @@ face_cascade = opencv.CascadeClassifier(
                                         opencv.data.haarcascades + 
                                         "haarcascade_frontalface_default.xml"
                                         )
-# Capture frames from camera
-frame = opencv.VideoCapture(0)
 
 # Start Tracking and Enjoy 
-face_tracker = TrackFace(face_cascade, frame)
-face_tracker.track_face()
+face_tracker = TrackFace(face_cascade)
+face_tracker.track_face("face.png")
